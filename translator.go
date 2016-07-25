@@ -40,6 +40,7 @@ type builderEvent struct {
 	NetworkName           string `json:"network_name"`
 	SecurityGroupAWSIDs   string `json:"security_group_aws_ids"`
 	NatGatewayAWSID       string `json:"nat_gateway_aws_id"`
+	NetworkAWSID          string `json:"network_aws_id"`
 	VCloudURL             string `json:"vcloud_url"`
 	Status                string `json:"status"`
 	ErrorCode             string `json:"error_code"`
@@ -92,9 +93,9 @@ func (t Translator) BuilderToConnector(j []byte) []byte {
 	json.Unmarshal(j, &input)
 
 	switch input.RouterType {
-	case "vcloud", "fake-vcloud", "fake":
+	case "vcloud", "vcloud-fake", "fake":
 		output = t.builderToVCloudConnector(input)
-	case "aws", "fake-aws":
+	case "aws", "aws-fake":
 		output = t.builderToAwsConnector(input)
 	}
 
@@ -141,6 +142,7 @@ func (t Translator) builderToAwsConnector(input builderEvent) []byte {
 	output.DatacenterAccessKey = input.DatacenterAccessKey
 	output.DatacenterVPCID = input.DatacenterName
 	output.NatGatewayAWSID = input.NatGatewayAWSID
+	output.NetworkAWSID = input.NetworkAWSID
 	output.Status = input.Status
 	output.ErrorCode = input.ErrorCode
 	output.ErrorMessage = input.ErrorMessage
@@ -158,9 +160,9 @@ func (t Translator) ConnectorToBuilder(j []byte) []byte {
 	dec.Decode(&input)
 
 	switch input["_type"] {
-	case "vcloud", "fake-vcloud", "fake":
+	case "vcloud", "vcloud-fake", "fake":
 		output = t.vcloudConnectorToBuilder(j)
-	case "aws", "fake-aws":
+	case "aws", "aws-fake":
 		output = t.awsConnectorToBuilder(j)
 	}
 
