@@ -40,6 +40,7 @@ type builderEvent struct {
 	NetworkName           string `json:"network_name"`
 	SecurityGroupAWSIDs   string `json:"security_group_aws_ids"`
 	NatGatewayAWSID       string `json:"nat_gateway_aws_id"`
+	NetworkAWSID          string `json:"network_aws_id"`
 	VCloudURL             string `json:"vcloud_url"`
 	Status                string `json:"status"`
 	ErrorCode             string `json:"error_code"`
@@ -141,6 +142,7 @@ func (t Translator) builderToAwsConnector(input builderEvent) []byte {
 	output.DatacenterAccessKey = input.DatacenterAccessKey
 	output.DatacenterVPCID = input.DatacenterName
 	output.NatGatewayAWSID = input.NatGatewayAWSID
+	output.NetworkAWSID = input.NetworkAWSID
 	output.Status = input.Status
 	output.ErrorCode = input.ErrorCode
 	output.ErrorMessage = input.ErrorMessage

@@ -7,4 +7,4 @@ WORKDIR /go/src/github.com/ernestio/nat-adapter
 
 RUN make deps && go install
 
-ENTRYPOINT /go/bin/nat-adapter
+ENTRYPOINT ./entrypoint.sh
