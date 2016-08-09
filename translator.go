@@ -26,6 +26,7 @@ type builderEvent struct {
 	Service               string `json:"service"`
 	Name                  string `json:"name"`
 	Rules                 []rule `json:"rules"`
+	NatType               string `json:"nat_type"`
 	RouterName            string `json:"router_name"`
 	RouterType            string `json:"router_type"`
 	RouterIP              string `json:"router_ip"`
@@ -95,6 +96,9 @@ func (t Translator) BuilderToConnector(j []byte) []byte {
 	switch input.RouterType {
 	case "vcloud", "fake-vcloud", "fake":
 		output = t.builderToVCloudConnector(input)
+	}
+
+	switch input.NatType {
 	case "aws", "fake-aws":
 		output = t.builderToAwsConnector(input)
 	}
@@ -136,7 +140,7 @@ func (t Translator) builderToAwsConnector(input builderEvent) []byte {
 
 	output.Uuid = input.Uuid
 	output.BatchID = input.BatchID
-	output.Type = input.RouterType
+	output.Type = input.NatType
 	output.DatacenterRegion = input.DatacenterRegion
 	output.DatacenterAccessToken = input.DatacenterAccessToken
 	output.DatacenterAccessKey = input.DatacenterAccessKey
