@@ -213,7 +213,7 @@ func (t Translator) awsConnectorToBuilder(j []byte) []byte {
 	output.DatacenterRegion = input.DatacenterRegion
 	output.DatacenterAccessToken = input.DatacenterAccessToken
 	output.DatacenterAccessKey = input.DatacenterAccessKey
-	output.DatacenterName = input.DatacenterVpcID
+	output.DatacenterName = input.DatacenterVPCID
 	output.NetworkAWSID = input.NetworkAWSID
 	output.NatGatewayAWSID = input.NatGatewayAWSID
 	// TODO: Documentation says something about Private IPS, but can't find any specs about it
