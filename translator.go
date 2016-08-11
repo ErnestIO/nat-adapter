@@ -39,7 +39,6 @@ type builderEvent struct {
 	DatacenterAccessToken string `json:"datacenter_token"`
 	DatacenterAccessKey   string `json:"datacenter_secret"`
 	NetworkName           string `json:"network_name"`
-	SecurityGroupAWSIDs   string `json:"security_group_aws_ids"`
 	NatGatewayAWSID       string `json:"nat_gateway_aws_id"`
 	NetworkAWSID          string `json:"network_aws_id"`
 	VCloudURL             string `json:"vcloud_url"`
@@ -211,18 +210,13 @@ func (t Translator) awsConnectorToBuilder(j []byte) []byte {
 	output.Uuid = input.Uuid
 	output.BatchID = input.BatchID
 	output.Type = input.Type
-	/*
-		output.DatacenterRegion = input.DatacenterRegion
-		output.DatacenterAccessToken = input.DatacenterAccessToken
-		output.DatacenterAccessKey = input.DatacenterAccessKey
-		output.DatacenterName = input.DatacenterVpcID
-		output.NetworkName = input.NetworkAWSID
-		output.SecurityGroupAWSIDs = input.SecurityGroupAWSIDs
-		// TODO: Documentation says something about Private IPS, but can't find any specs about it
-		output.Name = input.InstanceName
-		output.Image = input.InstanceImage
-		output.Type = input.InstanceType
-	*/
+	output.DatacenterRegion = input.DatacenterRegion
+	output.DatacenterAccessToken = input.DatacenterAccessToken
+	output.DatacenterAccessKey = input.DatacenterAccessKey
+	output.DatacenterName = input.DatacenterVpcID
+	output.NetworkAWSID = input.NetworkAWSID
+	output.NatGatewayAWSID = input.NatGatewayAWSID
+	// TODO: Documentation says something about Private IPS, but can't find any specs about it
 	output.Status = input.Status
 	output.ErrorCode = input.ErrorCode
 	output.ErrorMessage = input.ErrorMessage
