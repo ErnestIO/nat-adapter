@@ -80,9 +80,7 @@ type awsEvent struct {
 	DatacenterVPCID       string `json:"datacenter_vpc_id"`
 	NatGatewayAWSID       string `json:"nat_gateway_aws_id"`
 	NetworkAWSID          string `json:"network_aws_id"`
-	Status                string `json:"status"`
-	ErrorCode             string `json:"error_code"`
-	ErrorMessage          string `json:"error_message"`
+	ErrorMessage          string `json:"error"`
 }
 
 type Translator struct{}
@@ -146,9 +144,6 @@ func (t Translator) builderToAwsConnector(input builderEvent) []byte {
 	output.DatacenterVPCID = input.DatacenterName
 	output.NatGatewayAWSID = input.NatGatewayAWSID
 	output.NetworkAWSID = input.NetworkAWSID
-	output.Status = input.Status
-	output.ErrorCode = input.ErrorCode
-	output.ErrorMessage = input.ErrorMessage
 
 	body, _ := json.Marshal(output)
 
@@ -216,10 +211,12 @@ func (t Translator) awsConnectorToBuilder(j []byte) []byte {
 	output.DatacenterName = input.DatacenterVPCID
 	output.NetworkAWSID = input.NetworkAWSID
 	output.NatGatewayAWSID = input.NatGatewayAWSID
-	// TODO: Documentation says something about Private IPS, but can't find any specs about it
-	output.Status = input.Status
-	output.ErrorCode = input.ErrorCode
-	output.ErrorMessage = input.ErrorMessage
+
+	if input.ErrorMessage != "" {
+		output.Status = "errored"
+		output.ErrorCode = "0"
+		output.ErrorMessage = input.ErrorMessage
+	}
 
 	body, _ := json.Marshal(output)
 
