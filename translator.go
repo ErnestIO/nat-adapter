@@ -20,31 +20,34 @@ type rule struct {
 }
 
 type builderEvent struct {
-	Uuid                  string `json:"_uuid"`
-	BatchID               string `json:"_batch_id"`
-	Type                  string `json:"type"`
-	Service               string `json:"service"`
-	Name                  string `json:"name"`
-	Rules                 []rule `json:"rules"`
-	NatType               string `json:"nat_type"`
-	RouterName            string `json:"router_name"`
-	RouterType            string `json:"router_type"`
-	RouterIP              string `json:"router_ip"`
-	ClientName            string `json:"client_name"`
-	DatacenterName        string `json:"datacenter_name"`
-	DatacenterPassword    string `json:"datacenter_password"`
-	DatacenterRegion      string `json:"datacenter_region"`
-	DatacenterType        string `json:"datacenter_type"`
-	DatacenterUsername    string `json:"datacenter_username"`
-	DatacenterAccessToken string `json:"datacenter_token"`
-	DatacenterAccessKey   string `json:"datacenter_secret"`
-	NetworkName           string `json:"network_name"`
-	NatGatewayAWSID       string `json:"nat_gateway_aws_id"`
-	NetworkAWSID          string `json:"network_aws_id"`
-	VCloudURL             string `json:"vcloud_url"`
-	Status                string `json:"status"`
-	ErrorCode             string `json:"error_code"`
-	ErrorMessage          string `json:"error_message"`
+	Uuid                  string   `json:"_uuid"`
+	BatchID               string   `json:"_batch_id"`
+	Type                  string   `json:"type"`
+	Service               string   `json:"service"`
+	Name                  string   `json:"name"`
+	Rules                 []rule   `json:"rules"`
+	NatType               string   `json:"nat_type"`
+	RouterName            string   `json:"router_name"`
+	RouterType            string   `json:"router_type"`
+	RouterIP              string   `json:"router_ip"`
+	ClientName            string   `json:"client_name"`
+	DatacenterName        string   `json:"datacenter_name"`
+	DatacenterPassword    string   `json:"datacenter_password"`
+	DatacenterRegion      string   `json:"datacenter_region"`
+	DatacenterType        string   `json:"datacenter_type"`
+	DatacenterUsername    string   `json:"datacenter_username"`
+	DatacenterAccessToken string   `json:"datacenter_token"`
+	DatacenterAccessKey   string   `json:"datacenter_secret"`
+	NetworkName           string   `json:"network_name"`
+	NatGatewayAWSID       string   `json:"nat_gateway_aws_id"`
+	PublicNetwork         string   `json:"public_network"`
+	PublicNetworkAWSID    string   `json:"public_network_aws_id"`
+	RoutedNetworks        []string `json:"routed_networks"`
+	RoutedNetworkAWSIDs   []string `json:"routed_networks_aws_ids"`
+	VCloudURL             string   `json:"vcloud_url"`
+	Status                string   `json:"status"`
+	ErrorCode             string   `json:"error_code"`
+	ErrorMessage          string   `json:"error_message"`
 }
 
 type vcloudEvent struct {
@@ -71,16 +74,19 @@ type vcloudEvent struct {
 }
 
 type awsEvent struct {
-	Uuid                  string `json:"_uuid"`
-	BatchID               string `json:"_batch_id"`
-	Type                  string `json:"_type"`
-	DatacenterRegion      string `json:"datacenter_region"`
-	DatacenterAccessToken string `json:"datacenter_access_token"`
-	DatacenterAccessKey   string `json:"datacenter_access_key"`
-	DatacenterVPCID       string `json:"datacenter_vpc_id"`
-	NatGatewayAWSID       string `json:"nat_gateway_aws_id"`
-	NetworkAWSID          string `json:"network_aws_id"`
-	ErrorMessage          string `json:"error"`
+	Uuid                  string   `json:"_uuid"`
+	BatchID               string   `json:"_batch_id"`
+	Type                  string   `json:"_type"`
+	DatacenterRegion      string   `json:"datacenter_region"`
+	DatacenterAccessToken string   `json:"datacenter_access_token"`
+	DatacenterAccessKey   string   `json:"datacenter_access_key"`
+	DatacenterVPCID       string   `json:"datacenter_vpc_id"`
+	NatGatewayAWSID       string   `json:"nat_gateway_aws_id"`
+	PublicNetwork         string   `json:"public_network"`
+	PublicNetworkAWSID    string   `json:"public_network_aws_id"`
+	RoutedNetworks        []string `json:"routed_networks"`
+	RoutedNetworkAWSIDs   []string `json:"routed_networks_aws_ids"`
+	ErrorMessage          string   `json:"error"`
 }
 
 type Translator struct{}
@@ -143,7 +149,10 @@ func (t Translator) builderToAwsConnector(input builderEvent) []byte {
 	output.DatacenterAccessKey = input.DatacenterAccessKey
 	output.DatacenterVPCID = input.DatacenterName
 	output.NatGatewayAWSID = input.NatGatewayAWSID
-	output.NetworkAWSID = input.NetworkAWSID
+	output.PublicNetwork = input.PublicNetwork
+	output.PublicNetworkAWSID = input.PublicNetworkAWSID
+	output.RoutedNetworks = input.RoutedNetworks
+	output.RoutedNetworkAWSIDs = input.RoutedNetworkAWSIDs
 
 	body, _ := json.Marshal(output)
 
@@ -209,7 +218,10 @@ func (t Translator) awsConnectorToBuilder(j []byte) []byte {
 	output.DatacenterAccessToken = input.DatacenterAccessToken
 	output.DatacenterAccessKey = input.DatacenterAccessKey
 	output.DatacenterName = input.DatacenterVPCID
-	output.NetworkAWSID = input.NetworkAWSID
+	output.PublicNetwork = input.PublicNetwork
+	output.PublicNetworkAWSID = input.PublicNetworkAWSID
+	output.RoutedNetworks = input.RoutedNetworks
+	output.RoutedNetworkAWSIDs = input.RoutedNetworkAWSIDs
 	output.NatGatewayAWSID = input.NatGatewayAWSID
 
 	if input.ErrorMessage != "" {
