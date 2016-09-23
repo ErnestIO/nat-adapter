@@ -45,6 +45,7 @@ type builderEvent struct {
 	RoutedNetworks        []string `json:"routed_networks"`
 	RoutedNetworkAWSIDs   []string `json:"routed_networks_aws_ids"`
 	VCloudURL             string   `json:"vcloud_url"`
+	VpcID                 string   `json:"vpc_id"`
 	Status                string   `json:"status"`
 	ErrorCode             string   `json:"error_code"`
 	ErrorMessage          string   `json:"error_message"`
@@ -147,7 +148,7 @@ func (t Translator) builderToAwsConnector(input builderEvent) []byte {
 	output.DatacenterRegion = input.DatacenterRegion
 	output.DatacenterAccessToken = input.DatacenterAccessToken
 	output.DatacenterAccessKey = input.DatacenterAccessKey
-	output.DatacenterVPCID = input.DatacenterName
+	output.DatacenterVPCID = input.VpcID
 	output.NatGatewayAWSID = input.NatGatewayAWSID
 	output.PublicNetwork = input.PublicNetwork
 	output.PublicNetworkAWSID = input.PublicNetworkAWSID
@@ -217,7 +218,7 @@ func (t Translator) awsConnectorToBuilder(j []byte) []byte {
 	output.DatacenterRegion = input.DatacenterRegion
 	output.DatacenterAccessToken = input.DatacenterAccessToken
 	output.DatacenterAccessKey = input.DatacenterAccessKey
-	output.DatacenterName = input.DatacenterVPCID
+	output.VpcID = input.DatacenterVPCID
 	output.PublicNetwork = input.PublicNetwork
 	output.PublicNetworkAWSID = input.PublicNetworkAWSID
 	output.RoutedNetworks = input.RoutedNetworks
